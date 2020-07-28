@@ -24,6 +24,7 @@ void ShowData();
 void ShowDataQueue();
 void ShowDataSearch();
 void CheckOutData();
+void SortingData();
 //void EditData();
 
 //linkedlist function
@@ -49,6 +50,9 @@ int main() {
             ShowData();
             break;
         case 4:
+            SortingData();
+            break;
+        case 5:
             return 0;
         default:
             cout << "opsi tidak tersedia" << endl;
@@ -73,7 +77,7 @@ void  MainMenu()
 {
     system("cls");
     cout << "MENU UTAMA" << endl;
-    cout << "1. Input Data Mahasiswa\n2. Checkout Data Mahasiswa\n3. Tampilkan Data Mahasiswa\n4. Keluar" << endl;
+    cout << "1. Input Data Mahasiswa\n2. Checkout Data Mahasiswa\n3. Tampilkan Data Mahasiswa\n4. Sorting Nim Mahasiswa\n5. Keluar" << endl;
 }
 
 void AddData()
@@ -148,12 +152,13 @@ void ShowDataSearch()
     Mahasiswa* ptr;
     int search_nim, i = 0;
     string search_nama, search_prodi, search_angkatan;
-    bool status;
+    bool status = false;
 
     ptr = head;
     if (isEmpty() == 0)
     {
         cout << "Input Nim : "; cin >> search_nim;
+        cout << endl;
 
         while (ptr != NULL)
         {
@@ -164,10 +169,6 @@ void ShowDataSearch()
                 search_prodi = ptr->prodi;
                 search_angkatan = ptr->angkatan;
                 status = true;
-            }
-            else
-            {
-                status = false;
             }
             i++;
             ptr = ptr->next;
@@ -222,7 +223,7 @@ void ShowData()
 void CheckOutData()
 {
     system("cls");
-    cout << "Checkout Data Mahasiswa" << endl;
+    cout << "Checkout Data Mahasiswa" << endl << endl;
 
     Mahasiswa* hapus;
     int delete_nim;
@@ -248,57 +249,99 @@ void CheckOutData()
             delete_angkatan = head->angkatan;
             head = NULL;
         }
-        cout << "\nData Mahasiswa dengan " << endl;
+        cout << "Data Mahasiswa dengan " << endl;
         cout << "NIM : " << delete_nim << endl;
         cout << "Nama : " << delete_nama << endl;
         cout << "Program Studi : " << delete_prodi << endl;
         cout << "Angkatan : " << delete_angkatan << endl;
-        cout << "BERHASIL DIPROSES" << endl;
+        cout << "BERHASIL DIPROSES" << endl << endl;
 
     }
     else
     {
-        cout << "Data Masih Kosong" << endl;
+        cout << "Data Masih Kosong" << endl << endl;
     }
 
     cout << "tekan ENTER untuk kembali ke Menu Utama..." << endl;
     _getch();
 } 
 
+void SortingData()
+{
+    system("cls");
+    cout << "Sorting NIM Mahasiswa" << endl << endl;
+    Mahasiswa* index = NULL;
+    int nim, i = 1;
+
+    current = head;
+
+    if (isEmpty() == 0)
+    {
+        while (current != NULL)
+        {
+            index = current->next;
+            while (index != NULL)
+            {
+                if (current->nim > index->nim)
+                {
+                    nim = current->nim;
+                    current->nim = index->nim;
+                    index->nim = nim;
+                }
+                index = index->next;
+            }
+            cout << i << ". Nim : " << current->nim << endl;
+            current = current->next;
+            i++;
+        }
+        cout << endl;
+    }
+    else
+    {
+        cout << "Data Masih Kosong" << endl << endl;
+    }
+
+    cout << "tekan ENTER untuk kembali ke Menu Utama..." << endl;
+    _getch();
+}
+
 /*void EditData()
 {
     system("cls");
     cout << "Edit Data Mahasiswa" << endl;
 
+    Mahasiswa* ptr = head;
     int search_nim, new_nim;
     char new_nama[MAX];
     string new_prodi, new_angkatan;
 
-    if (isEmpty() == 1)
+    if (isEmpty() == 0)
     {
-        cout << "Data Masih Kosong" << endl;
-        _getch();
-        return;
-    }
-
-    cout << "Ganti Data Pada Nim : "; cin >> search_nim;
-    cout << "Input Nim Baru : "; cin >> new_nim; cin.ignore();
-    cout << "Input Nama Baru : "; cin.getline(new_nama, MAX);
-    cout << "Input Program Studi Baru : "; getline(cin, new_prodi);
-    cout << "Input Angkatan Baru : "; getline(cin, new_angkatan);
-
-    current = head;
-    while (current->next != NULL)
-    {
-        if (current->nim == search_nim)
+        cout << "Ganti Data Pada Nim : "; cin >> search_nim;
+        cout << "Input Nim Baru : "; cin >> new_nim; cin.ignore();
+        cout << "Input Nama Baru : "; cin.getline(new_nama, MAX);
+        cout << "Input Program Studi Baru : "; getline(cin, new_prodi);
+        cout << "Input Angkatan Baru : "; getline(cin, new_angkatan);
+        while (ptr != NULL)
         {
-            current->nim = new_nim;
-            strcpy_s(current->nama, new_nama);
-            current->prodi = new_prodi;
-            current->angkatan = new_angkatan;
-            cout << "\nData berhasil diganti" << endl;
+            if (ptr->nim == search_nim)
+            {
+                new_nim = ptr->nim;
+                strcpy_s(new_nama, ptr->nama);
+                new_prodi = ptr->prodi;
+                new_angkatan = ptr->angkatan;
+                cout << "\nData berhasil diganti" << endl << endl;
+            }
+            else
+            {
+                cout << "\nData tidak ditemukan" << endl << endl;
+            }
+            ptr = ptr->next;
         }
-        current = current->next;
+    }
+    else
+    {
+        cout << "Data Masih Kosong" << endl << endl;
     }
 
     cout << "tekan ENTER untuk kembali ke Menu Utama..." << endl;
